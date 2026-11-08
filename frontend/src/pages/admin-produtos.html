@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar produtos | Loja do Sandro</title>
+  <link rel="stylesheet" href="/src/styles/main.css">
+  <link rel="stylesheet" href="/src/styles/admin-produtos.css">
+</head>
+<div id="app-header"></div>
+
+<body class="admin-products-page">
+  <main class="admin-container">
+    <header class="admin-heading">
+      <div>
+        <p class="admin-eyebrow">Loja do Sandro · Administração</p>
+        <h1 class="admin-title">Cadastrar produtos</h1>
+        <p class="admin-subtitle">
+          Gerencie seu catálogo, preços e estoque.
+        </p>
+      </div>
+
+      <a href="/" class="admin-btn admin-btn-secondary">Voltar à loja</a>
+    </header>
+
+    <div id="mensagem" class="mb-4 hidden rounded-lg p-4" role="status"></div>
+
+    <section class="mb-8 rounded-xl border bg-white p-6 shadow-sm">
+      <h2 id="titulo-form" class="mb-5 text-xl font-bold">Adicionar produto</h2>
+
+      <form id="form-produto" class="grid gap-4 md:grid-cols-2">
+        <input id="produto-id" type="hidden">
+
+        <label>Nome *
+          <input id="nome" required minlength="2" maxlength="150" class="w-full rounded-lg border p-3">
+        </label>
+
+        <label class="admin-field">
+          Categoria *
+          <select id="categoria" name="categoriaId" required class="admin-input">
+            <option value="">Carregando categorias...</option>
+          </select>
+        </label>
+
+        <label>Preço em reais *
+          <input id="preco" type="number" min="0.01" step="0.01" required placeholder="49.90"
+            class="w-full rounded-lg border p-3">
+        </label>
+
+        <label>Preço anterior
+          <input id="preco-anterior" type="number" min="0.01" step="0.01" class="w-full rounded-lg border p-3">
+        </label>
+
+        <label>Estoque *
+          <input id="estoque" type="number" min="0" step="1" value="0" required class="w-full rounded-lg border p-3">
+        </label>
+
+        <label>URL da imagem
+          <input id="imagem" type="url" placeholder="https://..." class="w-full rounded-lg border p-3">
+        </label>
+
+        <label class="md:col-span-2">Descrição curta
+          <input id="descricao-curta" maxlength="255" class="w-full rounded-lg border p-3">
+        </label>
+
+        <label class="md:col-span-2">Descrição completa *
+          <textarea id="descricao" required minlength="5" rows="4" class="w-full rounded-lg border p-3"></textarea>
+        </label>
+
+        <label><input id="destaque" type="checkbox"> Produto em destaque</label>
+        <label><input id="ativo" type="checkbox" checked> Produto ativo</label>
+
+        <div class="flex gap-3 md:col-span-2">
+          <button id="botao-salvar" type="submit" class="admin-btn admin-btn-primary">
+            Cadastrar produto
+          </button>
+
+          <button id="botao-cancelar" type="button" class="admin-btn admin-btn-secondary hidden">
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="rounded-xl border bg-white p-6 shadow-sm">
+      <div class="mb-4 flex items-center justify-between gap-3">
+        <h2 class="text-xl font-bold">Produtos cadastrados</h2>
+        <button id="botao-atualizar" type="button" class="admin-btn admin-btn-secondary">
+          Atualizar lista
+        </button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="p-3">Produto</th>
+              <th class="p-3">Categoria</th>
+              <th class="p-3">Preço</th>
+              <th class="p-3">Estoque</th>
+              <th class="p-3">Situação</th>
+              <th class="p-3">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-produtos">
+            <tr>
+              <td colspan="6" class="p-4">Carregando produtos...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <div id="app-footer"></div>
+  <script type="module" src="/src/js/pages/admin-produtos.js"></script>
+</body>
+
+</html>

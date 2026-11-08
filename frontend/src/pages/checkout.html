@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finalizar compra | Loja do Sandro</title>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <main class="container-page py-10">
+      <h1 class="text-3xl font-bold text-stone-900">Finalizar compra</h1>
+
+      <div id="checkout" class="mt-8 grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div class="space-y-6">
+          <!-- ENDERECO -->
+          <section class="card p-6">
+            <div class="flex items-center justify-between">
+              <h2 class="text-lg font-bold text-stone-900">1. Endereco de entrega</h2>
+              <button type="button" id="toggle-new-address" class="text-sm font-semibold text-brand-600 hover:text-brand-700">
+                + Novo endereco
+              </button>
+            </div>
+
+            <div id="address-list" class="mt-5 space-y-3"></div>
+
+            <form id="new-address" class="mt-5 hidden space-y-4 border-t border-stone-200 pt-5">
+              <div class="grid gap-4 sm:grid-cols-2">
+                <div class="sm:col-span-2">
+                  <label class="label" for="recipient">Nome do destinatario</label>
+                  <input class="input" id="recipient" name="recipient" required placeholder="Nome completo" />
+                </div>
+                <div>
+                  <label class="label" for="street">Rua / Logradouro</label>
+                  <input class="input" id="street" name="street" required placeholder="Rua das Flores" />
+                </div>
+                <div>
+                  <label class="label" for="number">Numero</label>
+                  <input class="input" id="number" name="number" required placeholder="123" />
+                </div>
+                <div>
+                  <label class="label" for="complement">Complemento</label>
+                  <input class="input" id="complement" name="complement" placeholder="Apto 42 (opcional)" />
+                </div>
+                <div>
+                  <label class="label" for="zipCode">CEP</label>
+                  <input class="input" id="zipCode" name="zipCode" required placeholder="01001-000" maxlength="9" />
+                </div>
+                <div>
+                  <label class="label" for="district">Bairro</label>
+                  <input class="input" id="district" name="district" required placeholder="Centro" />
+                </div>
+                <div>
+                  <label class="label" for="city">Cidade</label>
+                  <input class="input" id="city" name="city" required placeholder="Sao Paulo" />
+                </div>
+                <div>
+                  <label class="label" for="state">UF</label>
+                  <input class="input" id="state" name="state" required maxlength="2" placeholder="SP" class="input uppercase" />
+                </div>
+              </div>
+              <button type="submit" class="btn-outline">Salvar e usar este endereco</button>
+            </form>
+          </section>
+
+          <!-- ENTREGA -->
+          <section class="card p-6">
+            <h2 class="text-lg font-bold text-stone-900">2. Forma de envio</h2>
+            <div id="shipping-options" class="mt-5 space-y-3"></div>
+          </section>
+
+          <!-- PAGAMENTO -->
+          <section class="card p-6">
+            <h2 class="text-lg font-bold text-stone-900">3. Pagamento</h2>
+            <div id="payment-options" class="mt-5 space-y-3"></div>
+            <div class="mt-4">
+              <label class="label" for="notes">Observacoes do pedido (opcional)</label>
+              <textarea id="notes" class="input" rows="3" placeholder="Instrucoes de entrega..."></textarea>
+            </div>
+          </section>
+        </div>
+
+        <!-- RESUMO -->
+        <aside id="order-summary" class="card h-fit p-6 lg:sticky lg:top-24"></aside>
+      </div>
+    </main>
+
+    <div id="app-footer"></div>
+    <div id="toast-root" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script type="module" src="/src/js/pages/checkout.js"></script>
+  </body>
+</html>

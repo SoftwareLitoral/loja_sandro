@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meus pedidos | Loja do Sandro</title>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <main class="container-page py-10">
+      <div class="flex items-end justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-stone-900">Meus pedidos</h1>
+          <p class="mt-2 text-stone-500">Acompanhe o status das suas compras.</p>
+        </div>
+        <select id="status-filter" class="input !w-48">
+          <option value="">Todos os status</option>
+          <option value="PENDING_PAYMENT">Aguardando pagamento</option>
+          <option value="PAID">Pago</option>
+          <option value="CONFIRMED">Confirmado</option>
+          <option value="SHIPPED">Enviado</option>
+          <option value="DELIVERED">Entregue</option>
+          <option value="CANCELLED">Cancelado</option>
+        </select>
+      </div>
+
+      <div id="orders" class="mt-8 space-y-4"></div>
+      <div id="pagination" class="mt-8 flex items-center justify-center gap-2"></div>
+    </main>
+
+    <div id="app-footer"></div>
+    <div id="toast-root" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script type="module" src="/src/js/pages/pedidos.js"></script>
+  </body>
+</html>

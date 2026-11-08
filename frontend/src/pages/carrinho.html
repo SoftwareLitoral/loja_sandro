@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carrinho | Loja do Sandro</title>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <main class="container-page py-10">
+      <h1 class="text-3xl font-bold text-stone-900">Meu carrinho</h1>
+
+      <div id="cart-content" class="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
+        <div id="cart-items" class="space-y-4"></div>
+        <aside id="cart-summary" class="card h-fit p-6 lg:sticky lg:top-24"></aside>
+      </div>
+    </main>
+
+    <div id="app-footer"></div>
+    <div id="toast-root" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script type="module" src="/src/js/pages/carrinho.js"></script>
+  </body>
+</html>

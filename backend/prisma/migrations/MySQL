@@ -1,0 +1,485 @@
+
+-- =========================================================
+-- LOJA DO SANDRO
+-- Banco de dados MySQL convertido do schema Prisma
+-- Valores monetarios armazenados em centavos
+-- =========================================================
+
+CREATE DATABASE IF NOT EXISTS loja_do_sandro
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE loja_do_sandro;
+
+-- =========================================================
+-- 1. USERS
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS users (
+    id VARCHAR(191) NOT NULL,
+    email VARCHAR(191) NOT NULL,
+    passwordHash VARCHAR(191) NOT NULL,
+    name VARCHAR(191) NOT NULL,
+    phone VARCHAR(191) NULL,
+    role ENUM('CUSTOMER', 'ADMIN') NOT NULL DEFAULT 'CUSTOMER',
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY users_email_key (email),
+    INDEX users_email_idx (email)
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 2. ADDRESSES
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS addresses (
+    id VARCHAR(191) NOT NULL,
+    userId VARCHAR(191) NOT NULL,
+    label VARCHAR(191) NOT NULL DEFAULT 'Endereço',
+    recipient VARCHAR(191) NOT NULL,
+    street VARCHAR(191) NOT NULL,
+    number VARCHAR(191) NOT NULL,
+    complement VARCHAR(191) NULL,
+    district VARCHAR(191) NOT NULL,
+    city VARCHAR(191) NOT NULL,
+    state VARCHAR(191) NOT NULL,
+    zipCode VARCHAR(191) NOT NULL,
+    isDefault BOOLEAN NOT NULL DEFAULT FALSE,
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX addresses_userId_idx (userId),
+
+    CONSTRAINT addresses_userId_fkey
+      FOREIGN KEY (userId) REFERENCES users(id)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 3. CATEGORIES
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS categories (
+    id VARCHAR(191) NOT NULL,
+    name VARCHAR(191) NOT NULL,
+    slug VARCHAR(191) NOT NULL,
+    description VARCHAR(191) NULL,
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY categories_slug_key (slug)
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 4. PRODUCTS
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS products (
+    id VARCHAR(191) NOT NULL,
+    name VARCHAR(191) NOT NULL,
+    slug VARCHAR(191) NOT NULL,
+    description TEXT NOT NULL,
+    shortDescription VARCHAR(255) NULL,
+    priceCents INT NOT NULL,
+    compareAtCents INT NULL,
+    stock INT NOT NULL DEFAULT 0,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    featured BOOLEAN NOT NULL DEFAULT FALSE,
+    categoryId VARCHAR(191) NOT NULL,
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY products_slug_key (slug),
+    INDEX products_categoryId_idx (categoryId),
+    INDEX products_active_featured_idx (active, featured),
+    INDEX products_name_idx (name),
+
+    CONSTRAINT products_categoryId_fkey
+      FOREIGN KEY (categoryId) REFERENCES categories(id)
+      ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 5. PRODUCT_IMAGES
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS product_images (
+    id VARCHAR(191) NOT NULL,
+    productId VARCHAR(191) NOT NULL,
+    url VARCHAR(191) NOT NULL,
+    alt VARCHAR(191) NULL,
+    position INT NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (id),
+    INDEX product_images_productId_idx (productId),
+
+    CONSTRAINT product_images_productId_fkey
+      FOREIGN KEY (productId) REFERENCES products(id)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 6. CARTS
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS carts (
+    id VARCHAR(191) NOT NULL,
+    userId VARCHAR(191) NULL,
+    token VARCHAR(191) NULL,
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY carts_token_key (token),
+    INDEX carts_userId_idx (userId),
+
+    CONSTRAINT carts_userId_fkey
+      FOREIGN KEY (userId) REFERENCES users(id)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 7. CART_ITEMS
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    id VARCHAR(191) NOT NULL,
+    cartId VARCHAR(191) NOT NULL,
+    productId VARCHAR(191) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY cart_items_cartId_productId_key (cartId, productId),
+    INDEX cart_items_cartId_idx (cartId),
+
+    CONSTRAINT cart_items_cartId_fkey
+      FOREIGN KEY (cartId) REFERENCES carts(id)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT cart_items_productId_fkey
+      FOREIGN KEY (productId) REFERENCES products(id)
+      ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 8. ORDERS
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS orders (
+    id VARCHAR(191) NOT NULL,
+    orderNumber VARCHAR(191) NOT NULL,
+    userId VARCHAR(191) NOT NULL,
+
+    status ENUM(
+      'PENDING_PAYMENT',
+      'PAID',
+      'CONFIRMED',
+      'SHIPPED',
+      'DELIVERED',
+      'CANCELLED',
+      'REFUNDED'
+    ) NOT NULL DEFAULT 'PENDING_PAYMENT',
+
+    paymentMethod ENUM(
+      'PIX',
+      'CREDIT_CARD',
+      'BOLETO',
+      'CASH_ON_DELIVERY'
+    ) NOT NULL,
+
+    paymentStatus ENUM(
+      'PENDING',
+      'PAID',
+      'FAILED',
+      'REFUNDED'
+    ) NOT NULL DEFAULT 'PENDING',
+
+    shippingMethod ENUM(
+      'STANDARD',
+      'EXPRESS',
+      'PICKUP'
+    ) NOT NULL DEFAULT 'STANDARD',
+
+    subtotalCents INT NOT NULL,
+    shippingCents INT NOT NULL DEFAULT 0,
+    discountCents INT NOT NULL DEFAULT 0,
+    totalCents INT NOT NULL,
+
+    recipient VARCHAR(191) NOT NULL,
+    street VARCHAR(191) NOT NULL,
+    number VARCHAR(191) NOT NULL,
+    complement VARCHAR(191) NULL,
+    district VARCHAR(191) NOT NULL,
+    city VARCHAR(191) NOT NULL,
+    state VARCHAR(191) NOT NULL,
+    zipCode VARCHAR(191) NOT NULL,
+    notes TEXT NULL,
+
+    createdAt DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updatedAt DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (id),
+    UNIQUE KEY orders_orderNumber_key (orderNumber),
+    INDEX orders_userId_createdAt_idx (userId, createdAt),
+    INDEX orders_status_idx (status),
+
+    CONSTRAINT orders_userId_fkey
+      FOREIGN KEY (userId) REFERENCES users(id)
+      ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- 9. ORDER_ITEMS
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id VARCHAR(191) NOT NULL,
+    orderId VARCHAR(191) NOT NULL,
+    productId VARCHAR(191) NULL,
+    productName VARCHAR(191) NOT NULL,
+    productSlug VARCHAR(191) NULL,
+    imageUrl VARCHAR(191) NULL,
+    unitPriceCents INT NOT NULL,
+    quantity INT NOT NULL,
+    totalCents INT NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX order_items_orderId_idx (orderId),
+    INDEX order_items_productId_idx (productId),
+
+    CONSTRAINT order_items_orderId_fkey
+      FOREIGN KEY (orderId) REFERENCES orders(id)
+      ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT order_items_productId_fkey
+      FOREIGN KEY (productId) REFERENCES products(id)
+      ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- =========================================================
+-- CONFERIR AS TABELAS CRIADAS
+-- =========================================================
+
+SHOW TABLES;
+
+
+-- =========================================================
+-- CADASTRAR USUARIOS
+-- =========================================================
+
+
+USE loja_do_sandro;
+
+-- =====================================================
+-- CADASTRAR 500 USUARIOS FICTICIOS COM ENDERECOS
+-- Requer MySQL 8.0+
+-- =====================================================
+
+START TRANSACTION;
+
+-- Gera uma lista temporaria com IDs e dados consistentes
+-- para relacionar cada usuario ao seu endereco.
+
+CREATE TEMPORARY TABLE seed_usuarios AS
+WITH RECURSIVE numeros AS (
+    SELECT 1 AS n
+    UNION ALL
+    SELECT n + 1
+    FROM numeros
+    WHERE n < 500
+)
+SELECT
+    n,
+    UUID() AS user_id,
+    CONCAT('Usuario Teste ', LPAD(n, 3, '0')) AS nome,
+    CONCAT('usuario.teste.', n, '@exemplo.com') AS email,
+    CONCAT('Rua de Teste ', n) AS rua,
+    CONCAT('Bairro ', LPAD(((n - 1) MOD 50) + 1, 2, '0')) AS bairro,
+    CONCAT('Cidade ', LPAD(((n - 1) MOD 20) + 1, 2, '0')) AS cidade,
+    CASE MOD(n, 5)
+        WHEN 0 THEN 'SP'
+        WHEN 1 THEN 'RJ'
+        WHEN 2 THEN 'MG'
+        WHEN 3 THEN 'PR'
+        ELSE 'SC'
+    END AS estado,
+    CONCAT(LPAD(MOD(n, 100000000), 8, '0')) AS cep
+FROM numeros;
+
+-- Insere os 500 usuarios.
+-- A senha abaixo e apenas um marcador de teste,
+-- NAO e um hash valido para login com bcrypt.
+
+INSERT INTO users (
+    id,
+    email,
+    passwordHash,
+    name,
+    phone,
+    role,
+    createdAt,
+    updatedAt
+)
+SELECT
+    user_id,
+    email,
+    'NAO_UTILIZAR_PARA_LOGIN',
+    nome,
+    CONCAT('119', LPAD(n, 8, '0')),
+    'CUSTOMER',
+    NOW(3),
+    NOW(3)
+FROM seed_usuarios;
+
+-- Insere um endereco para cada usuario.
+
+INSERT INTO addresses (
+    id,
+    userId,
+    label,
+    recipient,
+    street,
+    number,
+    complement,
+    district,
+    city,
+    state,
+    zipCode,
+    isDefault,
+    createdAt,
+    updatedAt
+)
+SELECT
+    UUID(),
+    user_id,
+    'Endereco principal',
+    nome,
+    rua,
+    CAST(n AS CHAR),
+    NULL,
+    bairro,
+    cidade,
+    estado,
+    cep,
+    TRUE,
+    NOW(3),
+    NOW(3)
+FROM seed_usuarios;
+
+-- Confirma as alteracoes.
+COMMIT;
+
+-- Limpa a tabela temporaria.
+DROP TEMPORARY TABLE seed_usuarios;
+
+-- =====================================================
+-- VALIDACAO
+-- =====================================================
+
+SELECT COUNT(*) AS total_usuarios_teste
+FROM users
+WHERE email LIKE 'usuario.teste.%@exemplo.com';
+
+SELECT COUNT(*) AS total_enderecos_teste
+FROM addresses
+WHERE recipient LIKE 'Usuario Teste %';
+
+-- Conferir alguns cadastros e seus enderecos.
+SELECT
+    u.name,
+    u.email,
+    a.street,
+    a.number,
+    a.district,
+    a.city,
+    a.state,
+    a.zipCode
+FROM users u
+INNER JOIN addresses a ON a.userId = u.id
+WHERE u.email LIKE 'usuario.teste.%@exemplo.com'
+ORDER BY u.email
+LIMIT 10;
+
+-- =========================================================
+-- CADASTRAR MAIS DE 500 USUARIOS
+-- =========================================================
+
+USE loja_do_sandro;
+
+START TRANSACTION;
+
+CREATE TEMPORARY TABLE novos_usuarios AS
+WITH RECURSIVE numeros AS (
+    SELECT 501 AS n
+    UNION ALL
+    SELECT n + 1
+    FROM numeros
+    WHERE n < 1000
+)
+SELECT
+    n,
+    UUID() AS user_id,
+    CONCAT('Usuario Teste ', LPAD(n, 4, '0')) AS nome,
+    CONCAT('usuario.teste.', n, '@exemplo.com') AS email
+FROM numeros;
+
+INSERT INTO users (
+    id, email, passwordHash, name, phone, role, createdAt, updatedAt
+)
+SELECT
+    user_id,
+    email,
+    'NAO_UTILIZAR_PARA_LOGIN',
+    nome,
+    CONCAT('119', LPAD(n, 8, '0')),
+    'CUSTOMER',
+    NOW(3),
+    NOW(3)
+FROM novos_usuarios;
+
+INSERT INTO addresses (
+    id, userId, label, recipient, street, number,
+    complement, district, city, state, zipCode,
+    isDefault, createdAt, updatedAt
+)
+SELECT
+    UUID(),
+    user_id,
+    'Endereco principal',
+    nome,
+    CONCAT('Rua de Teste ', n),
+    CAST(n AS CHAR),
+    NULL,
+    CONCAT('Bairro ', LPAD(MOD(n, 50) + 1, 2, '0')),
+    CONCAT('Cidade ', LPAD(MOD(n, 20) + 1, 2, '0')),
+    CASE MOD(n, 5)
+        WHEN 0 THEN 'SP'
+        WHEN 1 THEN 'RJ'
+        WHEN 2 THEN 'MG'
+        WHEN 3 THEN 'PR'
+        ELSE 'SC'
+    END,
+    LPAD(MOD(n, 100000000), 8, '0'),
+    TRUE,
+    NOW(3),
+    NOW(3)
+FROM novos_usuarios;
+
+COMMIT;
+
+DROP TEMPORARY TABLE novos_usuarios;
+
+SELECT COUNT(*) AS total_usuarios
+FROM users
+WHERE email LIKE 'usuario.teste.%@exemplo.com';
+
+SELECT COUNT(*) AS total_enderecos
+FROM addresses
+WHERE recipient LIKE 'Usuario Teste %';

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar conta | Loja do Sandro</title>
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <main class="container-page py-16">
+      <div class="mx-auto max-w-lg">
+        <div class="card p-8">
+          <h1 class="text-2xl font-bold text-stone-900">Criar conta</h1>
+          <p class="mt-1 text-sm text-stone-500">Cadastre-se para comprar e acompanhar seus pedidos.</p>
+
+          <form id="register-form" class="mt-6 space-y-4">
+            <div>
+              <label class="label" for="name">Nome completo</label>
+              <input class="input" id="name" name="name" required minlength="3" placeholder="Seu nome" />
+            </div>
+            <div>
+              <label class="label" for="email">E-mail</label>
+              <input class="input" type="email" id="email" name="email" required placeholder="voce@email.com" />
+            </div>
+            <div>
+              <label class="label" for="phone">Telefone (opcional)</label>
+              <input class="input" id="phone" name="phone" placeholder="(11) 90000-0000" />
+            </div>
+            <div>
+              <label class="label" for="password">Senha</label>
+              <input class="input" type="password" id="password" name="password" required minlength="6" placeholder="Minimo de 6 caracteres" />
+            </div>
+            <div>
+              <label class="label" for="passwordConfirm">Confirmar senha</label>
+              <input class="input" type="password" id="passwordConfirm" name="passwordConfirm" required minlength="6" placeholder="Repita a senha" />
+            </div>
+
+            <p id="form-error" class="hidden rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600"></p>
+            <button type="submit" class="btn-primary w-full">Criar conta</button>
+          </form>
+
+          <p class="mt-6 text-center text-sm text-stone-500">
+            Ja tem conta?
+            <a href="/src/pages/login.html" class="font-semibold text-brand-600 hover:text-brand-700">Entrar</a>
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <div id="app-footer"></div>
+    <div id="toast-root" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script type="module" src="/src/js/pages/cadastro.js"></script>
+  </body>
+</html>

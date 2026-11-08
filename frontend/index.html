@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loja do Sandro | Vestibaario e artesanato</title>
+    <meta name="description" content="Loja do Sandro: camisetas, moletons, bonecas artesanais e acessorios com entrega para todo o Brasil." />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>S</text></svg>" />
+    <script type="module" crossorigin src="/assets/index-DayPMmaK.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>S</text></svg>" />
+    <link rel="stylesheet" href="/src/styles/main.css" />
+  </head>
+  <body>
+    <div id="app-header"></div>
+
+    <main>
+      <!-- HERO -->
+      <section class="relative overflow-hidden bg-stone-900">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-700/40 via-stone-900 to-stone-900"></div>
+        <div class="container-page relative grid gap-12 py-20 lg:grid-cols-2 lg:py-28">
+          <div class="self-center">
+            <span class="badge bg-brand-500/20 text-brand-300">Edição 2026 • Nova coleção</span>
+            <h1 class="mt-5 text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
+              Feito a mao,<br />vestindo com <span class="text-brand-400">identidade</span>.
+            </h1>
+            <p class="mt-6 max-w-lg text-lg text-stone-300">
+              Camisetas, moletons e bonecas artesanais selecionadas uma a uma.
+              Frete gratis em compras acima de R$ 199.
+            </p>
+            <div class="mt-9 flex flex-wrap gap-3">
+              <a href="/src/pages/produtos.html" class="btn-primary !px-7 !py-3 !text-base">Ver produtos</a>
+              <a href="/src/pages/carrinho.html" class="btn !px-7 !py-3 !text-base border border-stone-600 text-white hover:bg-stone-800">Meu carrinho</a>
+            </div>
+            <dl class="mt-12 grid max-w-lg grid-cols-3 gap-6 border-t border-stone-700 pt-8">
+              <div><dt class="text-2xl font-bold text-white">100%</dt><dd class="mt-1 text-sm text-stone-400">Algodao penteado</dd></div>
+              <div><dt class="text-2xl font-bold text-white">+2k</dt><dd class="mt-1 text-sm text-stone-400">Clientes felizes</dd></div>
+              <div><dt class="text-2xl font-bold text-white">4.9</dt><dd class="mt-1 text-sm text-stone-400">Nota media</dd></div>
+            </dl>
+          </div>
+          <div class="relative">
+            <div class="aspect-4/5 overflow-hidden rounded-3xl border border-stone-700 bg-stone-800 shadow-2xl">
+              <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=900" alt="Camiseta da Loja do Sandro"
+                   class="h-full w-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CATEGORIAS -->
+      <section class="container-page py-16">
+        <div class="flex items-end justify-between">
+          <div>
+            <h2 class="text-3xl font-bold text-stone-900">Categorias</h2>
+            <p class="mt-2 text-stone-500">Escolha o que combina com voce.</p>
+          </div>
+          <a href="/src/pages/produtos.html" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Ver tudo →</a>
+        </div>
+        <div id="categories" class="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4"></div>
+      </section>
+
+      <!-- DESTAQUES -->
+      <section class="bg-white py-16">
+        <div class="container-page">
+          <div class="flex items-end justify-between">
+            <div>
+              <h2 class="text-3xl font-bold text-stone-900">Destaques</h2>
+              <p class="mt-2 text-stone-500">Os mais queridos da casa.</p>
+            </div>
+            <a href="/src/pages/produtos.html" class="text-sm font-semibold text-brand-600 hover:text-brand-700">Ver tudo →</a>
+          </div>
+          <div id="featured" class="mt-8 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4"></div>
+        </div>
+      </section>
+
+      <!-- BENEFICIOS -->
+      <section class="container-page py-16">
+        <div class="grid gap-6 md:grid-cols-3">
+          <div class="card p-6">
+            <div class="text-3xl">🚚</div>
+            <h3 class="mt-3 font-semibold text-stone-900">Entrega para todo o Brasil</h3>
+            <p class="mt-2 text-sm text-stone-500">Despacho em ate 24h uteis e rastreio por codigo.</p>
+          </div>
+          <div class="card p-6">
+            <div class="text-3xl">🔒</div>
+            <h3 class="mt-3 font-semibold text-stone-900">Compra 100% segura</h3>
+            <p class="mt-2 text-sm text-stone-500">Pagamento protegido e seus dados sempre protegidos.</p>
+          </div>
+          <div class="card p-6">
+            <div class="text-3xl">🎁</div>
+            <h3 class="mt-3 font-semibold text-stone-900">Brindes em网购</h3>
+            <p class="mt-2 text-sm text-stone-500">Acrescente um mimo gratis no carrinho acima de R$ 150.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="app-footer"></div>
+    <div id="toast-root" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+
+    <script type="module" src="/src/js/pages/home.js"></script>
+  </body>
+</html>

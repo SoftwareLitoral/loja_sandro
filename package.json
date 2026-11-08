@@ -1,0 +1,26 @@
+{
+  "name": "loja-do-sandro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Loja virtual completa - Node.js + Express + Prisma + MySQL (backend) e HTML/JS/Tailwind (frontend)",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "dev": "node scripts/dev.js",
+    "dev:backend": "npm --prefix backend run dev",
+    "seed:users": "node scripts/cadastrar-usuarios.js",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
+    "migrate": "npm --prefix backend run prisma:migrate",
+    "seed": "npm --prefix backend run seed",
+    "studio": "npm --prefix backend run prisma:studio"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^18.0.9"
+  }
+}
